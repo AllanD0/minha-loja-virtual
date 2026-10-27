@@ -492,6 +492,29 @@
         </div>
       </div>
     </section>
+        <section id="newsletter" class="mb-5 bg-body-tertiary rounded p-4"
+      aria-labelledby="tituloNewsletter">
+      <h2 id="tituloNewsletter" class="mb-3">Newsletter</h2>
+      <p>Informe seu e-mail para acompanhar novidades e ofertas.</p>
+
+      <form id="formNewsletter">
+        <label for="emailNewsletter" class="form-label">Seu e-mail</label>
+
+        <div class="input-group">
+          <input
+            type="email"
+            class="form-control"
+            id="emailNewsletter"
+            name="email"
+            placeholder="voce@exemplo.com"
+            autocomplete="email"
+            required>
+          <button class="btn btn-dark" type="submit">Assinar</button>
+        </div>
+      </form>
+
+      <p id="mensagemNewsletter" class="small mt-3 mb-0" role="status"></p>
+    </section>
   </main>
 
   <div
@@ -710,6 +733,15 @@
         avisoCarrinho.textContent =
           `Produto adicionado ao carrinho. Total de itens: ${total}.`;
       });
+    });
+        const formularioNewsletter = document.getElementById("formNewsletter");
+    const mensagemNewsletter = document.getElementById("mensagemNewsletter");
+
+    formularioNewsletter.addEventListener("submit", (event) => {
+      event.preventDefault();
+      mensagemNewsletter.textContent =
+        "Formato de e-mail válido. Cadastro demonstrativo, sem envio ou armazenamento.";
+      formularioNewsletter.reset();
     });
   </script>
 </body>
