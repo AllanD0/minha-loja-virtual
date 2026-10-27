@@ -70,7 +70,7 @@
         </button>
       </div>
 
-      <form
+        <form id="formBusca"
         class="d-flex col-12 col-lg-3 gap-2 mt-3 mt-lg-0 ms-lg-3"
         role="search">
         <input
@@ -256,7 +256,7 @@
       aria-labelledby="tituloDestaques">
 
       <h2 id="tituloDestaques" class="mb-4">Destaques</h2>
-
+        <p id="resultadoBusca" class="text-body-secondary" role="status"></p>
       <div class="row g-4">
         <div class="col-12 col-md-6 col-lg-3">
           <div class="card h-100">
@@ -792,6 +792,54 @@
         "Formato de e-mail válido. Cadastro demonstrativo, sem envio ou armazenamento.";
       formularioNewsletter.reset();
     });
+        const formularioBusca = document.getElementById("formBusca");
+    const campoBusca = document.getElementById("buscaProdutos");
+    const produtos = document.querySelectorAll("#destaques .row > div");
+    const resultadoBusca = document.getElementById("resultadoBusca");
+
+    function normalizarTexto(texto) {
+      return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function filtrarProdutos() {
+      const termo = normalizarTexto(campoBusca.value);
+      let encontrados = 0;
+
+      produtos.forEach((coluna) => {
+        const nome = coluna.querySelector(".card-title").textContent;
+        const descricao = coluna.querySelector(".card-text").textContent;
+        const corresponde = normalizarTexto(`${nome} ${descricao}`).includes(termo);
+
+        coluna.classList.toggle("d-none", !corresponde);
+
+        if (corresponde) {
+          encontrados++;
+        }
+      });
+
+      if (termo === "") {
+        resultadoBusca.textContent = "";
+      } else if (encontrados === 0) {
+        resultadoBusca.textContent = "Nenhum produto encontrado.";
+      } else {
+        resultadoBusca.textContent = encontrados === 1
+          ? "1 produto encontrado."
+          : `${encontrados} produtos encontrados.`;
+      }
+    }
+
+    formularioBusca.addEventListener("submit", (event) => {
+      event.preventDefault();
+      filtrarProdutos();
+      document.getElementById("destaques").scrollIntoView({ behavior: "smooth" });
+    });
+
+    campoBusca.addEventListener("input", filtrarProdutos);
   </script>
 </body>
 </html>
